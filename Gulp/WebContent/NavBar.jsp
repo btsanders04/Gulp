@@ -25,7 +25,7 @@
 			</div>
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="index.jsp">Home</a></li>
+					<li><a href="index.jsp">Home</a></li>
 					<li><a href="Restaurants">Restaurants</a></li>
 					<%if((Boolean)session.getAttribute("loggedIn")){ %>
 					<li><a href="Review">Review</a></li>

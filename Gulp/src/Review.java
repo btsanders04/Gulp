@@ -71,7 +71,7 @@ public class Review extends HttpServlet {
 		int restId = getRestId(rest);
 		String sql = "insert into review(user_id,restaurant_id,review_date,review_des,rating)"+
 					"values("+user_id+","+restId+","+"to_Date('"+date+"','yyyy/mm/dd'),'"+desc+"',"+rating+")";
-		System.out.println(sql);
+		//System.out.println(sql);
 		try {
 			DBQuery.updateDB(sql);
 			updateNumReviews(restId);

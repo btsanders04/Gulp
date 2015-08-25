@@ -30,7 +30,7 @@ public class RestaurantReviews extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		reviews="";
 		String id = request.getParameter("Restaurantid");
-		System.out.println(""+id);
+	//	System.out.println(""+id);
 		try {
 			DBQuery.openConnection();
 			String sql = "select * from review where restaurant_id="+Integer.parseInt(id);

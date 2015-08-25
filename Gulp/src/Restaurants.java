@@ -77,7 +77,7 @@ public class Restaurants extends HttpServlet {
 		String sql = 
 				"update restaurants set avg_rating = (select avg(rating) from review "+
 						"where review.restaurant_id =" +rest_id + ") where restaurants.restaurant_id= " + rest_id ;
-		System.out.println(sql);
+	//	System.out.println(sql);
 		try {
 			DBQuery.updateDB(sql);
 		} catch (SQLException e) {
