@@ -10,15 +10,15 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class Restaraunts
  */
-@WebServlet("/Restaraunts")
-public class Restaraunts extends HttpServlet {
+@WebServlet("/Restaurants")
+public class Restaurants extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+     private String restaurants="";
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Restaraunts() {
-        super();
+    public Restaurants() {
+    	System.out.println("init");
         // TODO Auto-generated constructor stub
     }
 
@@ -26,14 +26,22 @@ public class Restaraunts extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		response.setContentType("text/html");
+		//resturants ="XXX";
+		
+		System.out.println("Get");
+		// Actual logic goes here.
+		request.setAttribute("restaurants", restaurants);
+		getServletContext().getRequestDispatcher("/Restaurants.jsp").forward(request,
+				response);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		System.out.println("post");
+		
 	}
 
 }
