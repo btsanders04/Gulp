@@ -17,5 +17,17 @@
 <body>
 <jsp:include page="NavBar.jsp"/>
 
+	<form class="form-horizontal" role="form" action="Restaurants" method="post">
+	<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="submit" class="btn btn-default">Submit</button>
+				</div>
+			</div>
+		</form>
+${restaurants}
+
+
+
+
 </body>
 </html>

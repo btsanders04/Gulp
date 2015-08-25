@@ -18,7 +18,7 @@
 		<h2>Create Profile</h2>
 		<form class="form-horizontal" role="form" action="SignUp" method="post">
 			<div class="form-group">
-				<label class="control-label col-sm-2" for="">Name:</label>
+				<label  class="control-label col-sm-2" for="">Name:</label>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" id="name" name="name"
 						placeholder="Enter name">

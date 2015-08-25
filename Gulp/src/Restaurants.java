@@ -18,6 +18,7 @@ public class Restaurants extends HttpServlet {
      * @see HttpServlet#HttpServlet()
      */
     public Restaurants() {
+       	super();
     	System.out.println("init");
         // TODO Auto-generated constructor stub
     }
@@ -27,7 +28,7 @@ public class Restaurants extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
-		//resturants ="XXX";
+		restaurants ="XXX";
 		
 		System.out.println("Get");
 		// Actual logic goes here.

@@ -21,12 +21,12 @@
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="index.jsp">Gulp!</a>
+				<a  class="navbar-brand" href="index.jsp">Gulp!</a>
 			</div>
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="index.jsp">Home</a></li>
-					<li><a href="Restaurants.jsp">Restaurants</a></li>
+					<li  ><a  href="Restaurants.jsp">Restaurants</a></li >
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="SignUp.jsp"><span class="glyphicon glyphicon-user"></span>
