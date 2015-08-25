@@ -3,14 +3,14 @@ public class User {
 
 	
 	private String name,email,zipcode;
-	private int user_id;
+	private Integer user_id;
 	//private boolean loggedIn=false;
 	public User(int id){
 		user_id=id;
 	}
 	
 	
-	public int getUser_id() {
+	public Integer getUser_id() {
 		return user_id;
 	}
 

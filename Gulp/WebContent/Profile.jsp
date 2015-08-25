@@ -17,6 +17,6 @@
 <body>
 <jsp:include page="NavBar.jsp" />
 
-
+${profiles}
 </body>
 </html>
