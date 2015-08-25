@@ -27,23 +27,33 @@
 				<ul class="nav navbar-nav">
 					<li><a href="index.jsp?logOut=false">Home</a></li>
 					<li><a href="Restaurants">Restaurants</a></li>
-					<%if((Boolean)session.getAttribute("loggedIn")){ %>
+					<%
+						if ((Boolean) session.getAttribute("loggedIn")) {
+					%>
 					<li><a href="Review">Review</a></li>
 					<li><a href="Profile">Profile</a></li>
-					<%} %>
+					<%
+						}
+					%>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="SignUp"><span
-							class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-					<%if((Boolean)session.getAttribute("loggedIn")) {%>
+					<%
+						if ((Boolean) session.getAttribute("loggedIn")) {
+					%>
 					<li><a href="index.jsp?logOut=true"><span
 							class="glyphicon glyphicon-log-in"></span> Sign Out</a></li>
-					<%} else {%>
+					<%
+						} else {
+					%>
+					<li><a href="SignUp"><span
+							class="glyphicon glyphicon-user"></span> Sign Up</a></li>
 
 					<li><a href="SignIn"><span
 							class="glyphicon glyphicon-log-in"></span> Login</a></li>
-					<%} %>
-					<% %>
+					<%
+						}
+					%>
+					
 				</ul>
 			</div>
 		</div>
