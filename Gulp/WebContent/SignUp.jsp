@@ -40,7 +40,7 @@
 
 	<div class="container">
 		<h2>Create Profile</h2>
-		<form class="form-horizontal" role="form">
+		<form class="form-horizontal" role="form" action="SignUp" method="post">
 			<div class="form-group">
 				<label class="control-label col-sm-2" for="">Name:</label>
 				<div class="col-sm-10">
@@ -51,7 +51,7 @@
 			<div class="form-group">
 				<label class="control-label col-sm-2" for="">Email:</label>
 				<div class="col-sm-10">
-					<input type="email" class="form-control" id="email"
+					<input type="email" class="form-control" id="email" name="email"
 						placeholder="Enter email">
 				</div>
 			</div>
