@@ -4,7 +4,7 @@ public class User {
 	
 	private String name,email,zipcode;
 	private int user_id;
-	private boolean loggedIn=false;
+	//private boolean loggedIn=false;
 	public User(int id){
 		user_id=id;
 	}
@@ -17,15 +17,6 @@ public class User {
 	}
 
 
-	public boolean isLoggedIn() {
-		return loggedIn;
-	}
-
-
-	public void setLoggedIn(boolean loggedIn) {
-		this.loggedIn = loggedIn;
-	}
-	
 	
 	
 }
