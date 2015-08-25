@@ -10,7 +10,7 @@ public class User {
 	}
 	
 	
-	public void setDetails(String n, String e, String zip){
+	public void setDetails( String n, String e, String zip){
 		n=name;
 		email=e;
 		zipcode=zip;
