@@ -30,7 +30,8 @@ public class SignUp extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		getServletContext().getRequestDispatcher("/SignUp.jsp").forward(request,
+				response);
 	}
 
 	/**
@@ -55,7 +56,7 @@ public class SignUp extends HttpServlet {
 			e.printStackTrace();
 		}
 
-		getServletContext().getRequestDispatcher("/index.jsp").forward(request,
+		getServletContext().getRequestDispatcher("/SignUp.jsp").forward(request,
 				response);
 	}
 }
