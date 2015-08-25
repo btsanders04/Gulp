@@ -64,8 +64,9 @@ public class SignIn extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String logIn="<div class = \"container\"><h1>You are signed in</h1></div>";
-		request.setAttribute("logIn", logIn);
+		String logIn="<div class=\"container\"><div class=\"alert alert-success\"><a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>"+
+    "<strong>Success!</strong> You have logged in.</div></div>";
+    	request.setAttribute("logIn", logIn);
 		getServletContext().getRequestDispatcher("/index.jsp?logOut=false").forward(request,
 				response);
 	}
