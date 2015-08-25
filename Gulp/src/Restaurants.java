@@ -44,7 +44,7 @@ public class Restaurants extends HttpServlet {
 			                       result.getString("RESTAURANT_DES")+"</p><div class=\"row\"> <div class=\"col-xs-12 col-md-6\"> <p class=\"lead\">Rating: "+
 			                       result.getString("AVG_RATING")+"</p> <p class=\"lead\"> Number of Rating: "+
 			                       result.getString("NUM_RATING")+"</p> "+
-			                       "<div class=\"col-xs-12 col-md-6\"><a class=\"btn btn-success\" href=\"http://www.jquery2dotnet.com\">Reviews</a></div></div>  </div>   </div>   </div>  </div>";
+			                       "<div class=\"col-xs-12 col-md-6\"><a class=\"btn btn-primary\" href=\"RestaurantReviews?Restaurantid="+result.getString("RESTAURANT_ID")+"\"> Reviews </a></div></div>  </div>   </div>   </div>  </div>";
 			       
 			}
 			restaurants+="</div>";
