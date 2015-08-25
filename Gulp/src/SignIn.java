@@ -47,17 +47,16 @@ public class SignIn extends HttpServlet {
 		String pwd = request.getParameter("pwd");
 		String sql = "select * from userprofile where user_email = '"+email+
 				"' and user_pass = '"+pwd+"'";
-		System.out.println(sql);
+		//System.out.println(sql);
 		HttpSession session = request.getSession(true);
-		session.setAttribute("LoggedIn",false);
 		try {
 			ResultSet logIn = DBQuery.getFromDB(sql);
 			if(logIn.next()){
-				session.setAttribute("LoggedIn",true);
-				
-				
+				User user = new User(logIn.getInt("user_id"));
+				user.setDetails(logIn.getString("user_name"), logIn.getString("user_email"), logIn.getString("user_zipcode"));
+				user.setLoggedIn(true);
+				session.setAttribute("User",user);
 			}
-			System.out.println(session.getAttribute("LoggedIn"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
