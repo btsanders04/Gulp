@@ -12,7 +12,8 @@
 	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </head>
 <body>
-<%session.setAttribute("loggedIn", false); %>
+<%if(session.getAttribute("loggedIn")==null)
+		session.setAttribute("loggedIn", false); %>
 <jsp:include page="NavBar.jsp"/>
 
 </body>
