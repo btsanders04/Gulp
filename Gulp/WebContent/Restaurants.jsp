@@ -17,5 +17,6 @@
 <body>
 <jsp:include page="NavBar.jsp"/>
 
+${restaurants}
 </body>
 </html>
