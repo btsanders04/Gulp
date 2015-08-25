@@ -2,6 +2,7 @@
 
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,7 +38,7 @@ public class Restaurants extends HttpServlet {
 			ResultSet result = DBQuery.getFromDB(sql);
 			while(result.next())
 			{
-				
+				updateAverage(result.getInt("restaurant_id"));
 				restaurants+="<div class=\"item  col-xs-4 col-lg-4\"> <div class=\"thumbnail\"> <div class=\"caption\">"+
 			                  " <h4 class=\"group inner list-group-item-heading\">"+
 			                       result.getString("RESTAURANT_NAME")+"</h4> <p class=\"group inner list-group-item-text\">"+
@@ -70,6 +71,19 @@ public class Restaurants extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request,response);
+	}
+	
+	protected void updateAverage(int rest_id){
+		String sql = 
+				"update restaurants set avg_rating = (select avg(rating) from review "+
+						"where review.restaurant_id =" +rest_id + ") where restaurants.restaurant_id= " + rest_id ;
+		System.out.println(sql);
+		try {
+			DBQuery.updateDB(sql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

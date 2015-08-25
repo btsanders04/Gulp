@@ -16,5 +16,7 @@
 </head>
 <body>
 <jsp:include page="NavBar.jsp" />
+
+
 </body>
 </html>

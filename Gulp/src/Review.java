@@ -74,6 +74,7 @@ public class Review extends HttpServlet {
 		System.out.println(sql);
 		try {
 			DBQuery.updateDB(sql);
+			updateNumReviews(restId);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -92,6 +93,17 @@ public class Review extends HttpServlet {
 			e.printStackTrace();
 		}
 		return 0;
+	}
+	
+	protected void updateNumReviews(int restId){
+		String sql = "update restaurants set num_rating = ((select num_rating from restaurants where restaurant_id = "+ 
+				restId+") + 1) where restaurant_id = "+ restId;
+		try {
+			DBQuery.updateDB(sql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
