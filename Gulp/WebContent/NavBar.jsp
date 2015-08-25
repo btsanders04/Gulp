@@ -27,17 +27,16 @@
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="index.jsp">Home</a></li>
 					<li><a href="Restaurants">Restaurants</a></li>
-					<%System.out.println(session.getAttribute("loggedIn"));%>
 					<%if((Boolean)session.getAttribute("loggedIn")){ %>
 					<li><a href="Review.jsp">Review</a></li>
 					<li><a href="Profile.jsp">Profile</a></li>
-					<% }%>
-									</ul>
+					<%} %>
+				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="SignUp.jsp"><span class="glyphicon glyphicon-user"></span>
-							Sign Up</a></li>
-					<li><a href="SignIn.jsp"><span class="glyphicon glyphicon-log-in"></span>
-							Login</a></li>
+					<li><a href="SignUp.jsp"><span
+							class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+					<li><a href="SignIn.jsp"><span
+							class="glyphicon glyphicon-log-in"></span> Login</a></li>
 				</ul>
 			</div>
 		</div>
