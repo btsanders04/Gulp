@@ -49,7 +49,7 @@ public class SignUp extends HttpServlet {
 			String sql = "insert into userprofile (user_id, user_name, user_email, user_zipcode, USER_PASS)values(seq_user.nextval, '"
 					+ name + "','" + email + "','" + zip + "','" + pwd + "')";
 
-			ResultSet result = DBQuery.getFromDB(sql);
+			DBQuery.updateDB(sql);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
