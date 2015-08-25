@@ -13,8 +13,16 @@
 </head>
 <body>
 <%if(session.getAttribute("loggedIn")==null)
-		session.setAttribute("loggedIn", false); %>
+		session.setAttribute("loggedIn", false); 
+if(request.getParameter("logOut").equals("true"))
+			session.setAttribute("loggedIn",false);%>
 <jsp:include page="NavBar.jsp"/>
 
+<div class="container">
+  <div class="jumbotron">
+    <h1>Welcome To Gulp</h1>      
+   </div>
+</div>
+${logIn}
 </body>
 </html>

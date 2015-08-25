@@ -55,8 +55,8 @@ public class SignUp extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		getServletContext().getRequestDispatcher("/SignUp.jsp").forward(request,
+		
+		getServletContext().getRequestDispatcher("/SignIn.jsp").forward(request,
 				response);
 	}
 }

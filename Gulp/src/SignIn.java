@@ -64,8 +64,10 @@ public class SignIn extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		getServletContext().getRequestDispatcher("/SignIn.jsp").forward(
-				request, response);
+		String logIn="<div class = \"container\"><h1>You are signed in</h1></div>";
+		request.setAttribute("logIn", logIn);
+		getServletContext().getRequestDispatcher("/index.jsp?logOut=false").forward(request,
+				response);
 	}
 
 }

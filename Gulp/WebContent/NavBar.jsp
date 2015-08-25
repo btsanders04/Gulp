@@ -21,11 +21,11 @@
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="index.jsp">Gulp!</a>
+				<a class="navbar-brand" href="index.jsp?logOut=false">Gulp!</a>
 			</div>
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav">
-					<li><a href="index.jsp">Home</a></li>
+					<li><a href="index.jsp?logOut=false">Home</a></li>
 					<li><a href="Restaurants">Restaurants</a></li>
 					<%if((Boolean)session.getAttribute("loggedIn")){ %>
 					<li><a href="Review">Review</a></li>
@@ -35,16 +35,15 @@
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="SignUp"><span
 							class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-					<%if((Boolean)session.getAttribute("loggedIn")) {
-					session.setAttribute("loggedIn",false);%>
-
-					<li><a href="SignIn"><span
+					<%if((Boolean)session.getAttribute("loggedIn")) {%>
+					<li><a href="index.jsp?logOut=true"><span
 							class="glyphicon glyphicon-log-in"></span> Sign Out</a></li>
 					<%} else {%>
 
 					<li><a href="SignIn"><span
 							class="glyphicon glyphicon-log-in"></span> Login</a></li>
 					<%} %>
+					<% %>
 				</ul>
 			</div>
 		</div>
