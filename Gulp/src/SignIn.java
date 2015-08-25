@@ -1,11 +1,15 @@
 
 
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class SignIn
@@ -19,7 +23,6 @@ public class SignIn extends HttpServlet {
      */
     public SignIn() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -33,7 +36,34 @@ public class SignIn extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		DBQuery.openConnection();
+		String email = request.getParameter("email");
+		String pwd = request.getParameter("pwd");
+		String sql = "select * from userprofile where user_email = '"+email+
+				"' and user_pass = '"+pwd+"'";
+		System.out.println(sql);
+		HttpSession session = request.getSession(true);
+		session.setAttribute("LoggedIn",false);
+		try {
+			ResultSet logIn = DBQuery.getFromDB(sql);
+			if(logIn.next()){
+				session.setAttribute("LoggedIn",true);
+				
+				
+			}
+			System.out.println(session.getAttribute("LoggedIn"));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		getServletContext().getRequestDispatcher("/SignIn.jsp").forward(
+				request, response);
 	}
 
 }
