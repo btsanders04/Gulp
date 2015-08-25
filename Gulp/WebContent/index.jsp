@@ -13,6 +13,7 @@
 </head>
 <body>
 <jsp:include page="NavBar.jsp"/>
+<%session.setAttribute("loggedIn",false);%>
 
 </body>
 </html>

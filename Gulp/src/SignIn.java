@@ -54,7 +54,8 @@ public class SignIn extends HttpServlet {
 			if(logIn.next()){
 				User user = new User(logIn.getInt("user_id"));
 				user.setDetails(logIn.getString("user_name"), logIn.getString("user_email"), logIn.getString("user_zipcode"));
-				user.setLoggedIn(true);
+				//user.setLoggedIn(true);
+				session.setAttribute("loggedIn", true);
 				session.setAttribute("User",user);
 			}
 		} catch (SQLException e) {
