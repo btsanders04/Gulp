@@ -66,11 +66,11 @@ public class Review extends HttpServlet {
 		
 		
 		
-		String sql = "insert into "
+		//String sql = "insert into "
 	}
 	
 	protected void getRestId(String restName){
-		String sql = "select rest"
+	//	String sql = "select rest"
 	}
 
 }
