@@ -53,7 +53,7 @@ public class Restaurants extends HttpServlet {
 
                
 		   
-			restaurants+="</div>";
+			restaurants+="</div></div>";
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
