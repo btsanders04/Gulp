@@ -50,23 +50,29 @@ public class SignIn extends HttpServlet {
 		String sql = "select * from userprofile where user_email = '"+email+
 				"' and user_pass = '"+pwd+"'";
 		//System.out.println(sql);
-		HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession();
+		String log="";
 		try {
 			ResultSet logIn = DBQuery.getFromDB(sql);
 			if(logIn.next()){
 				User user = new User(logIn.getInt("user_id"));
 				user.setDetails(logIn.getString("user_name"), logIn.getString("user_email"), logIn.getString("user_zipcode"), logIn.getString("user_pass"));
-				//user.setLoggedIn(true);
 				session.setAttribute("loggedIn", true);
 				session.setAttribute("User",user);
+				log="<div class=\"container\"><div class=\"alert alert-success\"><a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>"+
+					    "<strong>Success!</strong> You have logged in.</div></div>";
+			}
+			else{
+				log="<div class=\"container\"><div class=\"alert alert-danger\"><a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>"+
+					    "<strong>Error!</strong> Your username/password can not be found.</div></div>";
+
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String logIn="<div class=\"container\"><div class=\"alert alert-success\"><a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>"+
-    "<strong>Success!</strong> You have logged in.</div></div>";
-    	request.setAttribute("logIn", logIn);
+		
+    	request.setAttribute("logIn", log);
 		getServletContext().getRequestDispatcher("/index.jsp?logOut=false").forward(request,
 				response);
 	}
