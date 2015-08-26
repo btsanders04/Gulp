@@ -44,7 +44,7 @@ public class Profile extends HttpServlet {
 					+"</div><div class=\"panel-body\"> <p class=\"group inner list-group-item-text\">"+result2.getString("USER_NAME") 
 						+"</p> <p class=\"group inner list-group-item-text\"> "+result2.getString("USER_EMAIL") 
 						+"</p> <p class=\"group inner list-group-item-text\"> "+result2.getString("USER_ZIPCODE") 
-					+"</p></div></div></div></div><div class=\"container\">";
+					+"</p><div class=\"col-xs-12 col-md-6\"><a class=\"btn btn-primary\" href=\"Editprofile?userid="+result2.getString("USER_ID")+"\"> Edit profile </a></div></div></div></div></div><div class=\"container\">";
 			String sql = "select * from review where USER_ID="+id;
 			
 			ResultSet result = DBQuery.getFromDB(sql);

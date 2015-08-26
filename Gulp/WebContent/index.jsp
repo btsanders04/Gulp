@@ -14,8 +14,10 @@
 <body>
 <%if(session.getAttribute("loggedIn")==null)
 		session.setAttribute("loggedIn", false); 
-if(request.getParameter("logOut").equals("true"))
-			session.setAttribute("loggedIn",false);%>
+
+if(request.getParameter("logOut")!= null){
+	if(request.getParameter("logOut").equals("true"))
+			session.setAttribute("loggedIn",false);}%>
 <jsp:include page="NavBar.jsp"/>
 
 <div class="container">

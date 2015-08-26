@@ -30,6 +30,8 @@ public class SignUp extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		
+		request.setAttribute("action","SignUp");
 		getServletContext().getRequestDispatcher("/SignUp.jsp").forward(request,
 				response);
 	}
