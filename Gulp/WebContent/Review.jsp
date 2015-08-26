@@ -17,12 +17,11 @@
 <body>
 	<jsp:include page="NavBar.jsp" />
 	<div class="container">
-		<h2>Review Restaraunt</h2>
-		<form class="form" role="form" action="Review" method = "POST">
+		<h2>Review Restaurant</h2>
+		<form class="form" role="form" action="${action}" method = "POST">
 			<div class="form-group">
 				<label for="restaurant">Select Restaurant:</label> <select
 					class="form-control" id="restaurant" name="restaurant">
-					<!Filled in from query of different restaraunts?>
 					${restaurants}
 				</select>
 			</div>
@@ -41,13 +40,12 @@
 			</div>
 			<div class="form-group">
 						<label for="date">Date:</label> <input type="Date"
-							class="form-control" name="date" id="date"
-							placeholder="Enter Date">
+							class="form-control" name="date" id="date">
 					</div>
 			<div class="form-group">
 				<div class="form-group">
 					<label for="desc">Description:</label>
-					<textarea class="form-control" rows="5" id="desc" name="desc"></textarea>
+					<textarea class="form-control" rows="5" id="desc" name="desc" placeholder="${description}"></textarea>
 				</div>
 			</div>
 			<div class="form-group">

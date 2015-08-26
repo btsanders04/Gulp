@@ -32,6 +32,9 @@ public class Review extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DBQuery.openConnection();
 		request.setAttribute("restaurants", restaurantList());
+		request.setAttribute("date", "mm/dd/yyyy");
+		request.setAttribute("description", "Enter Description");
+		request.setAttribute("action","Review");
 		getServletContext().getRequestDispatcher("/Review.jsp").forward(request,
 				response);
 	}

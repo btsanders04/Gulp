@@ -63,8 +63,10 @@ public class SignUp extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		getServletContext().getRequestDispatcher("/SignIn.jsp").forward(request,
-				response);
+		request.setAttribute("alertMessage", "<div class=\"container\"><div class=\"alert alert-success\"><a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>"+
+			    "<strong>Success!</strong> You have Signed Up.</div></div>");		
+		doGet(request,response);
+		//getServletContext().getRequestDispatcher("/SignUp.jsp").forward(request,
+		//		response);
 	}
 }
