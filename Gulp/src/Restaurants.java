@@ -34,20 +34,25 @@ public class Restaurants extends HttpServlet {
 			DBQuery.openConnection();
 			
 			String sql = "select * from restaurants";
-			restaurants+=" <div  class=\"row list-group\">";
+			restaurants+=" <div class=\"container\"><div  class=\"row list-group\">";
 			ResultSet result = DBQuery.getFromDB(sql);
 			while(result.next())
 			{
 				updateAverage(result.getInt("restaurant_id"));
 				restaurants+="<div class=\"item  col-xs-4 col-lg-4\"> <div class=\"thumbnail\"> <div class=\"caption\">"+
-			                  " <h4 class=\"group inner list-group-item-heading\">"+
-			                       result.getString("RESTAURANT_NAME")+"</h4> <p class=\"group inner list-group-item-text\">"+
-			                       result.getString("RESTAURANT_DES")+"</p><div class=\"row\"> <div class=\"col-xs-12 col-md-6\"> <p class=\"lead\">Rating: "+
-			                       result.getString("AVG_RATING")+"</p> <p class=\"lead\"> Number of Rating: "+
-			                       result.getString("NUM_RATING")+"</p> "+
-			                       "<div class=\"col-xs-12 col-md-6\"><a class=\"btn btn-primary\" href=\"RestaurantReviews?Restaurantid="+result.getString("RESTAURANT_ID")+"\"> Reviews </a></div></div>  </div>   </div>   </div>  </div>";
-			       
+		                  " <h4 class=\"group inner list-group-item-heading\">"+
+	                       result.getString("RESTAURANT_NAME")+"</h4> <p class=\"group inner list-group-item-text\">"+
+	                       result.getString("RESTAURANT_DES")+"</p> "+
+	                       "<p class=\"group inner list-group-item-text\"> <b>Address: </b>"+
+	                       result.getString("RESTAURANT_ADD")+"</p>  <p class=\"group inner list-group-item-text\"><b>Rating: </b>"+
+	                       result.getString("AVG_RATING")+"</p> <p class=\"group inner list-group-item-text\"> <b>Number of Rating: </b>"+
+	                       result.getString("NUM_RATING")+"</p> "+
+	                       "<div class=\"row\"><div class=\"col-xs-12 col-md-6\"><a class=\"btn btn-primary\" href=\"RestaurantReviews?Restaurantid="+result.getString("RESTAURANT_ID")+"\"> Reviews </a></div>"+
+	                       "<div class=\"col-md-4\"><a class=\"btn btn-primary\" href=\"EditRestaurant?Restaurantid="+result.getString("RESTAURANT_ID")+"&&Restaurantname="+ result.getString("RESTAURANT_NAME")+"&&Restaurantadd="+  result.getString("RESTAURANT_ADD")+"&&Restaurantde="+  result.getString("RESTAURANT_DES")+"\"> Edit </a> </div> </div>"+"  </div>      </div></div>";          
 			}
+
+               
+		   
 			restaurants+="</div>";
 
 		} catch (Exception e) {
