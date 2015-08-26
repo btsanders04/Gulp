@@ -42,6 +42,8 @@
 					%>
 					<li><a href="index.jsp?logOut=true"><span
 							class="glyphicon glyphicon-log-in"></span> Sign Out</a></li>
+					<li><a href="EditProfile"><span
+							class="glyphicon glyphicon-user"></span> Edit Profile</a></li>
 					<%
 						} else {
 					%>

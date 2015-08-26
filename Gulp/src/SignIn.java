@@ -55,7 +55,7 @@ public class SignIn extends HttpServlet {
 			ResultSet logIn = DBQuery.getFromDB(sql);
 			if(logIn.next()){
 				User user = new User(logIn.getInt("user_id"));
-				user.setDetails(logIn.getString("user_name"), logIn.getString("user_email"), logIn.getString("user_zipcode"));
+				user.setDetails(logIn.getString("user_name"), logIn.getString("user_email"), logIn.getString("user_zipcode"), logIn.getString("user_pass"));
 				//user.setLoggedIn(true);
 				session.setAttribute("loggedIn", true);
 				session.setAttribute("User",user);

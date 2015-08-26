@@ -30,8 +30,14 @@ public class SignUp extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		
+		String header = "Create Profile";
+		request.setAttribute("headName",header);
 		request.setAttribute("action","SignUp");
+		request.setAttribute("name","Enter name");
+		request.setAttribute("email","Enter email");
+		request.setAttribute("password","Enter password");
+		request.setAttribute("zip","Enter Zip Code");
+		
 		getServletContext().getRequestDispatcher("/SignUp.jsp").forward(request,
 				response);
 	}

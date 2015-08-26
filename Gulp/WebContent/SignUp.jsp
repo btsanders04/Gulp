@@ -15,7 +15,7 @@
 <jsp:include page="NavBar.jsp"/>
 
 	<div class="container">
-		<h2>Create Profile</h2>
+		<h2>${headName}</h2>
 		<form class="form-horizontal" role="form" action="${action}" method="post">
 			<div class="form-group">
 				<label class="control-label col-sm-2" for="">Name:</label>
@@ -35,14 +35,14 @@
 				<label class="control-label col-sm-2" for="pwd">Password:</label>
 				<div class="col-sm-10">
 					<input type="password" class="form-control" id="pwd" name="pwd"
-						placeholder="Enter password">
+						placeholder="${password}">
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="control-label col-sm-2" for="pwd">Zip Code:</label>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" id="zip" name="zip"
-						placeholder="Enter zip code">
+						placeholder="${zip}">
 				</div>
 			</div>
 			<div class="form-group">
