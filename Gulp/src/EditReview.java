@@ -47,12 +47,13 @@ public class EditReview extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String date=details[0];
 		String desc=details[1];
+		int rating = Integer.parseInt(request.getParameter("optradio"));
 		if(!request.getParameter("date").equals(""))
 			date=request.getParameter("date").replace("-", "/");
 		System.out.println(date);
 		if(!request.getParameter("desc").equals(""))
 			desc=request.getParameter("desc");
-		submitReviewEdit(date,desc,restId,user.getUser_id());
+		submitReviewEdit(date,desc,rating,restId,user.getUser_id());
 		getServletContext().getRequestDispatcher("/Profile").forward(request,
 				response);
 	}
@@ -76,9 +77,10 @@ public class EditReview extends HttpServlet {
 		return reviewDetails;
 	}
 	
-	protected void submitReviewEdit(String date, String desc, int restId, int userId){
+	protected void submitReviewEdit(String date, String desc, int rating, int restId, int userId){
 		String sql = "update review set review_date=to_Date('"+date+"','yyyy/mm/dd'), review_des='"+desc+
-				"' where user_id=" + userId + " and restaurant_id = "+restId;
+				"', rating="+rating+
+				" where user_id=" + userId + " and restaurant_id = "+restId;
 		try {
 			DBQuery.updateDB(sql);
 		} catch (SQLException e) {
