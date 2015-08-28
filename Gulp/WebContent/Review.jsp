@@ -39,10 +39,6 @@
 				</label>
 			</div>
 			<div class="form-group">
-						<label for="date">Date:</label> <input type="Date"
-							class="form-control" name="date" id="date">
-					</div>
-			<div class="form-group">
 				<div class="form-group">
 					<label for="desc">Description:</label>
 					<textarea class="form-control" rows="5" id="desc" name="desc" placeholder="${description}"></textarea>

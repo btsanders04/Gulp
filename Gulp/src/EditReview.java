@@ -1,14 +1,21 @@
 
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import customTools.DBUtil;
 
 /**
  * Servlet implementation class EditReview
@@ -16,9 +23,9 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/EditReview")
 public class EditReview extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    private String[] details;
+    private model.Review review;
     private int restId;
-    private User user;
+    private model.Userprofile user;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -32,10 +39,10 @@ public class EditReview extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		restId=Integer.parseInt(request.getParameter("restaurant"));
-		user = (User)request.getSession().getAttribute("User");
-		details=reviewDetails(restId,user.getUser_id());
-		request.setAttribute("restaurants","<option>"+details[0]+"</option>");
-		request.setAttribute("description", details[1]);
+		user = (model.Userprofile)request.getSession().getAttribute("User");
+		review =reviewDetails(restId,user.getUserId());
+		request.setAttribute("restaurants","<option>"+review.getRestaurant().getRestaurantName()+"</option>");
+		request.setAttribute("description", review.getReviewDes());
 		request.setAttribute("action", "EditReview");
 		getServletContext().getRequestDispatcher("/Review.jsp").forward(request,
 				response);
@@ -45,39 +52,57 @@ public class EditReview extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String date=details[0];
-		String desc=details[1];
-		int rating = Integer.parseInt(request.getParameter("optradio"));
-		if(!request.getParameter("date").equals(""))
-			date=request.getParameter("date").replace("-", "/");
-		System.out.println(date);
+	
+		
+		review.setRating(new BigDecimal(request.getParameter("optradio")));
+		//System.out.println(date);
+		review.setReviewDate(new Date());
 		if(!request.getParameter("desc").equals(""))
-			desc=request.getParameter("desc");
-		submitReviewEdit(date,desc,rating,restId,user.getUser_id());
+			review.setReviewDes(request.getParameter("desc"));
+	
+		EntityManager em = DBUtil.getEmFactory().createEntityManager();
+		EntityTransaction trans = em.getTransaction();
+		trans.begin();
+		String sql = "update Review r set r.reviewDate = :revDate, r.rating = :rating, r.reviewDes =:desc where"
+				+ " r.userprofile.userId = :id and r.restaurant.restaurantName = :restName";
+		
+		TypedQuery<model.Review> reviewQuery = em.createQuery(sql,model.Review.class).setParameter("revDate", review.getReviewDate()).setParameter("rating",review.getRating())
+		.setParameter("desc", review.getReviewDes()).setParameter("id", review.getUserprofile().getUserId()).setParameter("restName", review.getRestaurant().getRestaurantName());
+		
+		try{
+			reviewQuery.executeUpdate();
+			trans.commit();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			trans.rollback();
+		}
+		finally{
+			em.close();
+		}
 		getServletContext().getRequestDispatcher("/Profile").forward(request,
 				response);
 	}
 
-	protected String[] reviewDetails(int restId, int userId){
-		String sql = "select review_des, restaurant_name from review join restaurants on review.restaurant_id = "+restId +
-				" and review.user_id = " + userId +" and restaurants.restaurant_id="+restId;
-		System.out.println(sql);
-		String[] reviewDetails = new String[2];
+	protected model.Review reviewDetails(int restId, long userId){
+	//	String sql = "select review_des, restaurant_name from review join restaurants on review.restaurant_id = "+restId +
+		//		" and review.user_id = " + userId +" and restaurants.restaurant_id="+restId;
+		EntityManager em = DBUtil.getEmFactory().createEntityManager();
+	
+		String sql = "select r from Review r where r.restaurant.restaurantId = :restId and r.userprofile.userId = :userId";
+		
 		try {
-			ResultSet result = DBQuery.getFromDB(sql);
-			if(result.next()){
-				reviewDetails[0]=result.getString("restaurant_name");
-				System.out.println(reviewDetails[0]);
-				reviewDetails[1]=result.getString("review_des");
-			}
-		} catch (SQLException e) {
+			return (model.Review)em.createQuery(sql,model.Review.class).setParameter("restId", restId).setParameter("userId", userId).getSingleResult();
+			
+			
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return reviewDetails;
+		return null;
 	}
 	
-	protected void submitReviewEdit(String date, String desc, int rating, int restId, int userId){
+	protected void submitReviewEdit(Date date, String desc, int rating, int restId, long userId){
 		String sql = "update review set review_date=to_Date('"+date+"','yyyy/mm/dd'), review_des='"+desc+
 				"', rating="+rating+
 				" where user_id=" + userId + " and restaurant_id = "+restId;

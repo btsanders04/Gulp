@@ -2,12 +2,16 @@
 
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import customTools.DBUtil;
 
 /**
  * Servlet implementation class ResturantsReviews
@@ -15,7 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/RestaurantReviews")
 public class RestaurantReviews extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       private String reviews ="";
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -28,26 +31,22 @@ public class RestaurantReviews extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		reviews="";
-		String id = request.getParameter("Restaurantid");
+		String reviewString="";
+		Long id = Long.parseLong(request.getParameter("Restaurantid"));
 	//	System.out.println(""+id);
 		try {
-			DBQuery.openConnection();
-			String sql = "select * from review where restaurant_id="+Integer.parseInt(id);
-		reviews+="<div class=\"container\">";
-			ResultSet result = DBQuery.getFromDB(sql);
-			while(result.next())
-			{
-				String sql2 = "select user_name from userprofile where user_id="+result.getString("USER_ID");
-				ResultSet result2 = DBQuery.getFromDB(sql2);
-				result2.next();
-				reviews+=" <div class=\"panel panel-primary\"><div class=\"panel-heading\">"+result2.getString("user_name")+"</div>"+
-			     " <div class=\"panel-body\"><p > Date: "+result.getDate("REVIEW_DATE")
-						+"</p><p>  Rating: "+result.getString("RATING")+"</p><p>"
-			     +result.getString("REVIEW_DES")+"</p></div></div>";
-			
+			reviewString+="<div class=\"container\">";
+			String sql = "select r from Review r where r.restaurant.restaurantId = :restId";
+			EntityManager em = DBUtil.getEmFactory().createEntityManager();
+			;
+			List<model.Review> reviews = em.createQuery(sql,model.Review.class).setParameter("restId", id).getResultList();
+			for(model.Review r : reviews){
+				reviewString+=" <div class=\"panel panel-primary\"><div class=\"panel-heading\">"+r.getUserprofile().getUserName()+"</div>"+
+			     " <div class=\"panel-body\"><p > Date: "+r.getReviewDate()
+						+"</p><p>  Rating: "+r.getRating()+"</p><p>"
+			     +r.getReviewDes()+"</p></div></div>";
 				}
-			reviews+="</div>";
+			reviewString+="</div>";
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -59,7 +58,7 @@ public class RestaurantReviews extends HttpServlet {
 		response.setContentType("text/html");
 
 		// Actual logic goes here.
-		request.setAttribute("reviews", reviews);
+		request.setAttribute("reviews", reviewString);
 		getServletContext().getRequestDispatcher("/RestaurantReviews.jsp").forward(request,
 				response);
 	}

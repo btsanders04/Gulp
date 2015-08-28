@@ -1,14 +1,22 @@
 
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import customTools.DBUtil;
 
 /**
  * Servlet implementation class Restaraunts
@@ -16,7 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/Restaurants")
 public class Restaurants extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private String restaurants="";
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -29,26 +36,26 @@ public class Restaurants extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		restaurants="";
+		String restaurants="";
 		try {
-			DBQuery.openConnection();
 			
-			String sql = "select * from restaurants order by avg_rating desc";
+			String sql = "select g from Restaurants g order by g.avgRating desc";
+			EntityManager em = DBUtil.getEmFactory().createEntityManager();
+			List<model.Restaurants> restList = em.createQuery(sql,model.Restaurants.class).getResultList();
 			restaurants+=" <div class=\"container\"><div class=\"row\">";
-			ResultSet result = DBQuery.getFromDB(sql);
-			while(result.next())
-			{
-				updateAverage(result.getInt("restaurant_id"));
+			
+			for(model.Restaurants r : restList){
+				updateAverage(r.getRestaurantId());
 				restaurants+="<div class=\"item  col-sm-6 col-sm-6\"> <div class=\"thumbnail\"> <div class=\"caption\">"+
 		                  " <h4>"+
-	                       result.getString("RESTAURANT_NAME")+"</h4> <p>"+
-	                       result.getString("RESTAURANT_DES")+"</p> "+
+	                       r.getRestaurantName()+"</h4> <p>"+
+	                       r.getRestaurantDes()+"</p> "+
 	                       "<p> <b>Address: </b>"+
-	                       result.getString("RESTAURANT_ADD")+"</p>  <p><b>Rating: </b>"+
-	                       result.getString("AVG_RATING")+"</p> <p> <b>Number of Rating: </b>"+
-	                       result.getString("NUM_RATING")+"</p> "+
-	                       "<a class=\"btn btn-primary\" href=\"RestaurantReviews?Restaurantid="+result.getString("RESTAURANT_ID")+"\"> Reviews </a>"+
-	                       "<a class=\"btn btn-primary\" href=\"EditRestaurant?Restaurantid="+result.getString("RESTAURANT_ID")+"&&Restaurantname="+ result.getString("RESTAURANT_NAME")+"&&Restaurantadd="+  result.getString("RESTAURANT_ADD")+"&&Restaurantde="+  result.getString("RESTAURANT_DES")+"\"> Edit </a></div></div></div>";          
+	                       r.getRestaurantAdd()+"</p>  <p><b>Rating: </b>"+
+	                       r.getAvgRating()+"</p> <p> <b>Number of Rating: </b>"+
+	                       r.getNumRating()+"</p> "+
+	                       "<a class=\"btn btn-primary\" href=\"RestaurantReviews?Restaurantid="+r.getRestaurantId()+"\"> Reviews </a>"+
+	                       "<a class=\"btn btn-primary\" href=\"EditRestaurant?Restaurantid="+r.getRestaurantId()+"\" &&> Edit </a></div></div></div>";          
 			}
 
                
@@ -78,16 +85,32 @@ public class Restaurants extends HttpServlet {
 		doGet(request,response);
 	}
 	
-	protected void updateAverage(int rest_id){
-		String sql = 
-				"update restaurants set avg_rating = (select avg(rating) from review "+
-						"where review.restaurant_id =" +rest_id + ") where restaurants.restaurant_id= " + rest_id ;
-	//	System.out.println(sql);
+	protected void updateAverage(long id){
+		
+		
+		EntityManager em = DBUtil.getEmFactory().createEntityManager();
+		EntityTransaction trans = em.getTransaction();
+		trans.begin();
+		//	System.out.println(sql);
 		try {
-			DBQuery.updateDB(sql);
-		} catch (SQLException e) {
+			String avgSql = "select avg(r.rating) as average from Review r "+
+					"where r.restaurant.restaurantId = :id";
+			TypedQuery<Double> avg = em.createQuery(avgSql, Double.class).setParameter("id", id);
+			BigDecimal average = new BigDecimal(avg.getSingleResult()).setScale(2,RoundingMode.DOWN);
+			System.out.println(average);
+			String restSql = "update Restaurants g set g.avgRating = :avg where g.restaurantId= :id";
+			
+			TypedQuery<model.Restaurants> result = em.createQuery(restSql,model.Restaurants.class).setParameter("id", id)
+					.setParameter("avg",average);
+			result.executeUpdate();
+			trans.commit();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			trans.rollback();
+		}
+		finally{
+			em.close();
 		}
 	}
 

@@ -1,9 +1,15 @@
-
-
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,102 +17,140 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import customTools.DBUtil;
+
 /**
  * Servlet implementation class Review
  */
 @WebServlet("/Review")
 public class Review extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public Review() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public Review() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
 		DBQuery.openConnection();
 		request.setAttribute("restaurants", restaurantList());
 		request.setAttribute("date", "mm/dd/yyyy");
 		request.setAttribute("description", "Enter Description");
-		request.setAttribute("action","Review");
-		getServletContext().getRequestDispatcher("/Review.jsp").forward(request,
-				response);
+		request.setAttribute("action", "Review");
+		getServletContext().getRequestDispatcher("/Review.jsp").forward(
+				request, response);
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
 		String restaurant = request.getParameter("restaurant");
-		int rating = Integer.parseInt(request.getParameter("optradio"));
-		String date = request.getParameter("date");
-		date = date.replace("-", "/");
-		User user = (User)request.getSession().getAttribute("User");
+		BigDecimal rating = new BigDecimal(request.getParameter("optradio"));
+		System.out.println(request.getParameter("date"));
+		Date date=new Date();
+		model.Userprofile user = (model.Userprofile) request.getSession()
+				.getAttribute("User");
 		String description = request.getParameter("desc");
-		postReview(restaurant, user.getUser_id(),rating,date, description);
+		postReview(restaurant, user, rating, date, description);
 		getServletContext().getRequestDispatcher("/index.jsp").forward(request,
 				response);
 	}
-	
-	protected String restaurantList(){
-		String restaurants="";
-		String sql = "select restaurant_name from restaurants";
+
+	protected String restaurantList() {
+		String restaurants = "";
+
+		EntityManager em = DBUtil.getEmFactory().createEntityManager();
+		TypedQuery<model.Restaurants> restQuery = em.createQuery(
+				"SELECT g FROM Restaurants g", model.Restaurants.class);
 		try {
-			ResultSet result = DBQuery.getFromDB(sql);
-			while(result.next()){
-				restaurants+="<option>"+result.getString("restaurant_name")+"</option>";
+			List<model.Restaurants> restList = restQuery.getResultList();
+			for (model.Restaurants r : restList) {
+				restaurants += "<option>" + r.getRestaurantName() + "</option>";
 			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println(e);
+		} finally {
+			em.close();
 		}
+
 		return restaurants;
 	}
-	
-	protected void postReview(String rest, int user_id, int rating, String date, String desc){
+
+	protected void postReview(String rest, model.Userprofile user, BigDecimal rating,
+			Date date, String desc) {
+
+		model.Restaurants restaurant = getRestaurant(rest);
+		model.Review review = new model.Review();
+		review.setRestaurant(restaurant);
+		review.setUserprofile(user);
+		review.setRating(rating);
+		review.setReviewDate(date);
+		review.setReviewDes(desc);
+		EntityManager em = DBUtil.getEmFactory().createEntityManager();
+		EntityTransaction trans = em.getTransaction();
+		trans.begin();
+		try {
+			em.persist(review);
+			trans.commit();
+		} catch (Exception e) {
+			System.out.println(e);
+			trans.rollback();
+		} finally {
+			em.close();
+		}
+	}
+
+	protected model.Restaurants getRestaurant(String restName) {
+		String sql = "select g from Restaurants g where g.restaurantName = :restName";
 		
-		int restId = getRestId(rest);
-		String sql = "insert into review(user_id,restaurant_id,review_date,review_des,rating)"+
-					"values("+user_id+","+restId+","+"to_Date('"+date+"','yyyy/mm/dd'),'"+desc+"',"+rating+")";
-		//System.out.println(sql);
+		EntityManager em = DBUtil.getEmFactory().createEntityManager();
+		TypedQuery<model.Restaurants> restQuery = em.createQuery(sql,
+				model.Restaurants.class);
+		restQuery.setParameter("restName", restName);
 		try {
-			DBQuery.updateDB(sql);
-			updateNumReviews(restId);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return restQuery.getSingleResult();	 
+		} catch (Exception e) {
+			System.out.println(e);
+		} finally {
+			em.close();
 		}
+		return null;
 	}
-	
-	protected int getRestId(String restName){
-		String sql = "select restaurant_id from restaurants where restaurant_name ='" + restName +"'";
+
+	protected void updateNumReviews(long restId) {
+		// String sql =
+		// "update restaurants set num_rating = ((select num_rating from restaurants where restaurant_id = "
+		// + restId + ") + 1) where restaurant_id = " + restId;
+		String sql = "UPDATE Restaurants g SET g.numRating = ((select g.numRating FROM restaurants g where"
+				+ "g.restaurantId = :restId) + 1) where g.restaurantId = :restId";
+		EntityManager em = DBUtil.getEmFactory().createEntityManager();
+		TypedQuery<model.Restaurants> restQuery = em.createQuery(sql,
+				model.Restaurants.class);
+		restQuery.setParameter("restId", restId);
+		EntityTransaction trans = em.getTransaction();
+		trans.begin();
 		try {
-			ResultSet result = DBQuery.getFromDB(sql);
-			if(result.next()){
-				return result.getInt("restaurant_id");
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			restQuery.executeUpdate();
+			trans.commit();
+
+		} catch (Exception e) {
+			trans.rollback();
+			System.out.println(e);
+		} finally {
+			em.close();
 		}
-		return 0;
-	}
-	
-	protected void updateNumReviews(int restId){
-		String sql = "update restaurants set num_rating = ((select num_rating from restaurants where restaurant_id = "+ 
-				restId+") + 1) where restaurant_id = "+ restId;
-		try {
-			DBQuery.updateDB(sql);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 	}
 
 }
